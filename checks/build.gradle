@@ -23,7 +23,7 @@ dependencies {
 jar {
     manifest {
         attributes 'Manifest-Version': 1.0
-        attributes('Lint-Registry': 'com.example.lint.checks.SampleIssueRegistry')
+        attributes('Lint-Registry': 'com.example.lint.checks.SKMIssueRegistry')
     }
 }
 

@@ -17,18 +17,11 @@ package com.example.lint.checks
 
 import com.android.resources.ResourceFolderType
 import com.android.tools.lint.detector.api.*
-import com.android.utils.subtagCount
-import com.android.utils.text
-import org.w3c.dom.Document
 import org.w3c.dom.Element
-import org.w3c.dom.NamedNodeMap
 
-/**
- * Sample detector showing how to analyze Kotlin/Java code. This example
- * flags all string literals in the code that contain the word "lint".
- */
+
 @Suppress("UnstableApiUsage")
-class SampleCodeDetector : ResourceXmlDetector(), XmlScanner {
+class SKMShortEndTagDetector : ResourceXmlDetector(), XmlScanner {
 
     override fun visitElement(context: XmlContext, element: Element) {
         val nodeList = element.childNodes
@@ -41,7 +34,7 @@ class SampleCodeDetector : ResourceXmlDetector(), XmlScanner {
         if (content.contains("/>")) {
             return
         }
-        context.report(ISSUE, element, context.getLocation(element), "Need short end tag")
+        context.report(ISSUE, element, context.getLocation(element), Constants.ISSUE_PREFIX + "Need short end tag")
     }
 
 
@@ -77,7 +70,7 @@ class SampleCodeDetector : ResourceXmlDetector(), XmlScanner {
             priority = 6,
             severity = Severity.WARNING,
             implementation = Implementation(
-                SampleCodeDetector::class.java,
+                SKMShortEndTagDetector::class.java,
                 Scope.RESOURCE_FILE_SCOPE
             )
         )

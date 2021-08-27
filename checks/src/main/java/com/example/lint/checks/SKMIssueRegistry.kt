@@ -23,8 +23,11 @@ import com.android.tools.lint.detector.api.*
  * The list of issues that will be checked when running <code>lint</code>.
  */
 @Suppress("UnstableApiUsage")
-class SampleIssueRegistry : IssueRegistry() {
-    override val issues = listOf(SampleCodeDetector.ISSUE)
+class SKMIssueRegistry : IssueRegistry() {
+    override val issues = listOf(
+        SKMShortEndTagDetector.ISSUE,
+        MethodNameDetector.ISSUE
+    )
 
     override val api = CURRENT_API
 
@@ -33,9 +36,9 @@ class SampleIssueRegistry : IssueRegistry() {
     // Requires lint API 30.0+; if you're still building for something
     // older, just remove this property.
    /* override val vendor: Vendor = Vendor(
-        vendorName = "Android Open Source Project",
-        feedbackUrl = "https://github.com/googlesamples/android-custom-lint-rules/issues",
-        contact = "https://github.com/googlesamples/android-custom-lint-rules"
+        vendorName = "SKM Android Team",
+        feedbackUrl = "Let's improve coding skill",
+        contact = "You can fix it"
     )*/
 }
 
