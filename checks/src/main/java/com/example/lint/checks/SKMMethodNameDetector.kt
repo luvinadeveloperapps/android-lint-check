@@ -4,7 +4,7 @@ import com.android.tools.lint.client.api.UElementHandler
 import com.android.tools.lint.detector.api.*
 import org.jetbrains.uast.*
 
-class MethodNameDetector : Detector(), Detector.UastScanner{
+class SKMMethodNameDetector : Detector(), Detector.UastScanner{
 
     override fun getApplicableUastTypes()  = listOf<Class<out UElement>>(UMethod::class.java)
 
@@ -45,7 +45,7 @@ class MethodNameDetector : Detector(), Detector.UastScanner{
             priority = 6,
             severity = Severity.WARNING,
             implementation = Implementation(
-                MethodNameDetector::class.java,
+                SKMMethodNameDetector::class.java,
                 Scope.JAVA_FILE_SCOPE
             )
         )

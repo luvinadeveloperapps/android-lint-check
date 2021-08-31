@@ -1,10 +1,10 @@
 package com.android.example;
 
-public class MethodNameTest {
-    public MethodNameTest(){
+class methodNameTest {
+    public methodNameTest(){
 
     }
-    public MethodNameTest(String Input){
+    public methodNameTest(String Input){
 
     }
     private void demo(String input) {

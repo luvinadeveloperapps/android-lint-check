@@ -26,7 +26,8 @@ import com.android.tools.lint.detector.api.*
 class SKMIssueRegistry : IssueRegistry() {
     override val issues = listOf(
         SKMShortEndTagDetector.ISSUE,
-        MethodNameDetector.ISSUE
+        SKMMethodNameDetector.ISSUE,
+        SKMClassNameDetector.ISSUE
     )
 
     override val api = CURRENT_API

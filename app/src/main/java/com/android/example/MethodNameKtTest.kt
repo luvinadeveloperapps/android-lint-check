@@ -1,6 +1,6 @@
 package com.android.example
 
-class MethodNameKtTest() {
+class methodNameKtTest() {
     init {
         fun Demo3 (Input : String){}
     }
