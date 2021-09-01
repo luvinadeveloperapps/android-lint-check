@@ -15,6 +15,11 @@ class Constants {
         const val CLASS_NAME_ID = "ClassNameID"
         const val CLASS_NAME_BRIEF = "Need start with uppercase"
         const val CLASS_NAME_EXPLANATION = "Class name must be not null and start with uppercase"
+
+        const val METHOD_LINE_ID = "MethodLineID"
+        const val METHOD_LINE_BRIEF = "The number of lines of code of the method exceeds the limit"
+        const val METHOD_LINE_EXPLANATION = "The number of lines of code of the method exceeds the limit"
+
     }
 
 }

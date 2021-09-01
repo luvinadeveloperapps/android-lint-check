@@ -27,7 +27,8 @@ class SKMIssueRegistry : IssueRegistry() {
     override val issues = listOf(
         SKMShortEndTagDetector.ISSUE,
         SKMMethodNameDetector.ISSUE,
-        SKMClassNameDetector.ISSUE
+        SKMClassNameDetector.ISSUE,
+        SKMMethodLineDetector.ISSUE
     )
 
     override val api = CURRENT_API

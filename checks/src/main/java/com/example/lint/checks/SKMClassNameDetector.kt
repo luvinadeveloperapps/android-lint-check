@@ -5,12 +5,12 @@ import com.android.tools.lint.detector.api.*
 import org.jetbrains.kotlin.js.translate.utils.finalElement
 import org.jetbrains.uast.*
 
-class SKMClassNameDetector : Detector(), Detector.UastScanner{
+class SKMClassNameDetector : Detector(), Detector.UastScanner {
 
     override fun getApplicableUastTypes()  = listOf<Class<out UClass>>(UClass::class.java)
 
 
-    override fun createUastHandler(context: JavaContext): UElementHandler? {
+    override fun createUastHandler(context: JavaContext): UElementHandler {
         return ClassHandler(context)
     }
 
