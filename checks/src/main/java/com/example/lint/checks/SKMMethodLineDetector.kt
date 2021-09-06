@@ -2,8 +2,6 @@ package com.example.lint.checks
 
 import com.android.tools.lint.client.api.UElementHandler
 import com.android.tools.lint.detector.api.*
-import org.jetbrains.kotlin.psi.psiUtil.endOffset
-import org.jetbrains.kotlin.psi.psiUtil.getTextWithLocation
 import org.jetbrains.kotlin.psi.psiUtil.startOffset
 import org.jetbrains.uast.*
 
@@ -22,23 +20,36 @@ class SKMMethodLineDetector : Detector(), Detector.UastScanner {
             }
             val location = context.getLocation(node)
             val lineMethod = location.end!!.line - location.start!!.line
-            val lineComment = node.comments
-            val javaPsi = node.javaPsi.body?.context?.startOffset
-            var a: String? = null
-            if (lineComment != null) {
-//                for (i in lineComment.parent.getTextWithLocation()) {
-//                    val b = i.javaPsi?.context.
-//                }
-                a = lineComment.parent.getTextWithLocation()
-            }
+            val methodContent = context.client.readFile(context.file).toString().split("\n")
 
-            val line = lineMethod
-            if (lineMethod >= 30) {
+            var startBlockCommentLine = 0
+            var commentNumber = 0
+            for (index in methodContent.indices) {
+                val content = methodContent[index].trim()
+                if (content.startsWith("//")) {
+                    if (startBlockCommentLine == 0) { //prevent comment in comment
+                        commentNumber += 1
+                        continue
+                    }
+                }
+                if (content.startsWith("/*")) {
+                    if (startBlockCommentLine == 0) {
+                        startBlockCommentLine = index
+                        continue
+                    }
+                }
+                if (content.endsWith("*/")) {
+                    commentNumber += index - startBlockCommentLine + 1
+                    startBlockCommentLine = 0
+                    continue
+                }
+            }
+            val methodLineWithoutComment = lineMethod - commentNumber
+            if (methodLineWithoutComment > 30) {
                 context.report(ISSUE, node, context.getLocation(node), Constants.ISSUE_PREFIX
-                        + "${a} , ${lineComment}  Method has $lineMethod lines. The maximum number of lines for a " +
-                        "method" +
-                        " is 30 " +
-                        "lines.")
+                        + "method=$lineMethod, comment = $commentNumber."
+                        + "The maximum number of lines for a method is 30 lines."
+                )
             }
         }
     }

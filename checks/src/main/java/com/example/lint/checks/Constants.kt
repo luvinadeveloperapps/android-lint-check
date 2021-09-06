@@ -17,8 +17,8 @@ class Constants {
         const val CLASS_NAME_EXPLANATION = "Class name must be not null and start with uppercase"
 
         const val METHOD_LINE_ID = "MethodLineID"
-        const val METHOD_LINE_BRIEF = "The number of lines of code of the method exceeds the limit"
-        const val METHOD_LINE_EXPLANATION = "The number of lines of code of the method exceeds the limit"
+        const val METHOD_LINE_BRIEF = "The number lines of code of the method <= 30"
+        const val METHOD_LINE_EXPLANATION = "The number of lines of code of the method - exclude comments exceeds the limit (30)"
 
     }
 
