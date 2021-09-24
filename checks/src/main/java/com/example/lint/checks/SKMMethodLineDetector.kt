@@ -14,17 +14,16 @@ class SKMMethodLineDetector : Detector(), Detector.UastScanner {
     }
 
     private inner class MethodHandler (private val context: JavaContext) : UElementHandler() {
+        val methodContent = context.client.readFile(context.file).toString().split("\n")
         override fun visitMethod(node: UMethod) {
             if (node.isConstructor) {
                 return
             }
             val location = context.getLocation(node)
             val lineMethod = location.end!!.line - location.start!!.line
-            val methodContent = context.client.readFile(context.file).toString().split("\n")
-
             var startBlockCommentLine = 0
             var commentNumber = 0
-            for (index in methodContent.indices) {
+            for (index in location.start!!.line until location.end!!.line) {
                 val content = methodContent[index].trim()
                 if (content.startsWith("//")) {
                     if (startBlockCommentLine == 0) { //prevent comment in comment
