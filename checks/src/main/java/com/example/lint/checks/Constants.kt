@@ -20,6 +20,9 @@ class Constants {
         const val METHOD_LINE_BRIEF = "The number lines of code of the method <= 30"
         const val METHOD_LINE_EXPLANATION = "The number of lines of code of the method - exclude comments exceeds the limit (30)"
 
+        const val EXPRESSION_ID = "ExpressionID"
+        const val EXPRESSION_BRIEF = "Each line should contain one statement"
+        const val EXPRESSION_EXPLANATION = "More than one statement in a line"
     }
 
 }
