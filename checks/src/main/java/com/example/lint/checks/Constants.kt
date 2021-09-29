@@ -23,6 +23,10 @@ class Constants {
         const val EXPRESSION_ID = "ExpressionID"
         const val EXPRESSION_BRIEF = "Each line should contain one statement"
         const val EXPRESSION_EXPLANATION = "More than one statement in a line"
+
+        const val IF_NET_ID = "IfNetID"
+        const val IF_NET_BRIEF = "More than 3 if statements in a net"
+        const val IF_NET_EXPLANATION = "If-net should maximum 3 if statements"
     }
 
 }
