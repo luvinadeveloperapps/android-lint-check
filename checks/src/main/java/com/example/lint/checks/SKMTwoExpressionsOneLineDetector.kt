@@ -2,18 +2,23 @@ package com.example.lint.checks
 
 import com.android.tools.lint.client.api.UElementHandler
 import com.android.tools.lint.detector.api.*
-import org.jetbrains.uast.*
+import org.jetbrains.uast.UClass
+import org.jetbrains.uast.UFile
+import org.jetbrains.uast.UImportStatement
+import org.jetbrains.uast.toUElement
+import java.util.regex.Matcher
+import java.util.regex.Pattern
 
 class SKMTwoExpressionsOneLineDetector : Detector(), Detector.UastScanner {
 
-    override fun getApplicableUastTypes()  = listOf(UImportStatement::class.java, UMethod::class.java)
+    override fun getApplicableUastTypes() = listOf(UImportStatement::class.java, UFile::class.java)
 
     override fun createUastHandler(context: JavaContext): UElementHandler? {
         return ExpressionHandler(context)
     }
 
-    private inner class ExpressionHandler (private val context: JavaContext) : UElementHandler() {
-        val methodContent = context.client.readFile(context.file).toString().split("\n")
+    private inner class ExpressionHandler(private val context: JavaContext) : UElementHandler() {
+        val fileContent = context.client.readFile(context.file).toString()
         var beforeImportLine = -1
         override fun visitImportStatement(node: UImportStatement) {
             var currentImportLine = context.getLocation(node).end!!.line
@@ -26,53 +31,50 @@ class SKMTwoExpressionsOneLineDetector : Detector(), Detector.UastScanner {
             beforeImportLine = currentImportLine
         }
 
-        override fun visitMethod(node: UMethod) {
-            val location = context.getLocation(node)
-            for (index in location.start!!.line until location.end!!.line) {
-                val lineContent = methodContent[index].trim()
-                if(!lineContent.contains(";")) {
+        override fun visitFile(node: UFile) {
+            val fileContentNoComment = removeComment(fileContent)
+            val fileLines = fileContentNoComment.split("\n")
+            for ((index, line) in fileLines.withIndex()) {
+                if (line.startsWith("import")) {
                     continue
                 }
-                if (lineContent.startsWith("for")) {
+                if (!line.contains(";")) {
                     continue
                 }
-                var splitArr =  lineContent.trim().split(";")
-                if(checkComment(splitArr[1])) {
-                    context.report(
-                        ISSUE, node, context.getLocation(node), Constants.ISSUE_PREFIX
-                                + "Two statement at line=${index + 1}"
-                    )
+                if (line.startsWith("for")) {
                     continue
                 }
 
+                var splitArr = line.trim().split(";")
+                if (splitArr[1].isNullOrEmpty()) {
+                    continue
+                }
+
+                val position = context.getNameLocation(node).start!!.line
+                val location = Location.create(context.file, line, index, index + 1)
+                context.report(
+                    ISSUE, node, location, Constants.ISSUE_PREFIX
+                            + "Two statement at line=${index + 1}"
+                )
             }
         }
 
-        private fun checkComment(inputStr: String) : Boolean {
-            if (inputStr.isNullOrEmpty()) {
-                return false
-            }
-            var input =  inputStr
-            while (true) {
-                if (input.startsWith("//")) {
-                    return false
-                }
-                if (input.startsWith("/*")) {
-                    val splitComment = input.split("*/")
-                    input = splitComment[1]
-                    continue
-                }
-                return true
-            }
+        private fun removeComment(inputStr: String): String {
+            val regex = "(/\\*([^*]|[\\r\\n]|(\\*+([^*/]|[\\r\\n])))*\\*+/)|(//.*)"
+            val p = Pattern.compile(regex)
+            val m: Matcher = p.matcher(inputStr)
+            return m.replaceAll("")
         }
+
     }
+
 
     companion object {
         val ISSUE: Issue = Issue.create(
-            id =  Constants.EXPRESSION_ID,
+            id = Constants.EXPRESSION_ID,
 
-            briefDescription =  Constants.EXPRESSION_BRIEF,
-            explanation =  Constants.EXPRESSION_EXPLANATION,
+            briefDescription = Constants.EXPRESSION_BRIEF,
+            explanation = Constants.EXPRESSION_EXPLANATION,
             category = Category.CORRECTNESS,
             priority = 6,
             severity = Severity.WARNING,
