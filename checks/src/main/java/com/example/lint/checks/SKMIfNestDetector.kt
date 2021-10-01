@@ -18,6 +18,7 @@ class SKMIfNestDetector : Detector(), Detector.UastScanner {
 
     private inner class IfNestHandler(private val context: JavaContext) : UElementHandler() {
         var listNet = ArrayList<Net>()
+
         override fun visitForEachExpression(node: UForEachExpression) {
             detectNet(node)
         }
@@ -45,13 +46,18 @@ class SKMIfNestDetector : Detector(), Detector.UastScanner {
             detectNet(node)
         }
 
-
         private fun detectNet(node: UElement) {
             val location = context.getLocation(node)
-            val curStartIndex = location.start!!.line + 1
-            val curEndIndex = location.end!!.line + 1
+            val currentNet = Net(location.start!!.line + 1, location.end!!.line + 1)
 
-            val currentNet = Net(curStartIndex, curEndIndex)
+            if (node is UIfExpression) {
+                val elseElement = node.elseExpression
+                if (elseElement != null) {
+                    val elseLocation = context.getLocation(elseElement)
+                    currentNet.endNet = elseLocation.start!!.line + 1
+                }
+            }
+
             if (listNet.size == 0) {
                 listNet.add(currentNet)
                 return
@@ -59,13 +65,13 @@ class SKMIfNestDetector : Detector(), Detector.UastScanner {
 
             val netBefore = listNet[listNet.size - 1]
             val netFirst = listNet[0]
-            if (currentNet.startNet > netFirst.endNet) {
+            if (currentNet.startNet >= netFirst.endNet) {
                 listNet.clear()
                 listNet.add(currentNet)
                 return
             }
 
-            if (currentNet.endNet < netBefore.endNet) {
+            if (currentNet.endNet <= netBefore.endNet) {
                 listNet.add(currentNet)
 
                 if (listNet.size == 4) {
@@ -83,10 +89,10 @@ class SKMIfNestDetector : Detector(), Detector.UastScanner {
                 return
             }
 
-            if (currentNet.startNet > netBefore.endNet) {
+            if (currentNet.startNet >= netBefore.endNet) {
                 val listNetNew = ArrayList<Net>()
                 for (net in listNet) {
-                    if (currentNet.startNet < net.endNet) {
+                    if (currentNet.startNet <= net.endNet) {
                         listNetNew.add(net)
                     }
                 }
@@ -109,7 +115,7 @@ class SKMIfNestDetector : Detector(), Detector.UastScanner {
         }
     }
 
-    data class Net(val startNet: Int, val endNet: Int)
+    data class Net(var startNet: Int, var endNet: Int)
 
     companion object {
         val ISSUE: Issue = Issue.create(
