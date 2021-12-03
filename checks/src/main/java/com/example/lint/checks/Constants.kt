@@ -27,6 +27,10 @@ class Constants {
         const val IF_NET_ID = "IfNetID"
         const val IF_NET_BRIEF = "More than 3 if statements in a net"
         const val IF_NET_EXPLANATION = "If-net should maximum 3 if statements"
+
+        const val METHOD_PARAMETER_ID = "MethodParameterID"
+        const val METHOD_PARAMETER_BRIEF = "More than 5 input parameters in method"
+        const val METHOD_PARAMETER_EXPLANATION = "Method should maximum 5 input parameters"
     }
 
 }
