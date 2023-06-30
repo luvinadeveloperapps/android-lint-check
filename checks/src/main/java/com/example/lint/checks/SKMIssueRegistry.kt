@@ -25,14 +25,15 @@ import com.android.tools.lint.detector.api.*
 @Suppress("UnstableApiUsage")
 class SKMIssueRegistry : IssueRegistry() {
     override val issues = listOf(
-        //SKMShortEndTagDetector.ISSUE,
-        //SKMMethodNameDetector.ISSUE,
-        //SKMClassNameDetector.ISSUE,
-        //SKMMethodLineDetector.ISSUE,
-        //SKMTwoExpressionsOneLineDetector.ISSUE
-        //SKMIfNestDetector.ISSUE
-    //SKMMethod5Parameters.ISSUE
-        SKMIfExpression.ISSUE
+        SKMShortEndTagDetector.ISSUE,
+        SKMMethodNameDetector.ISSUE,
+        SKMClassNameDetector.ISSUE,
+        SKMMethodLineDetector.ISSUE,
+        SKMTwoExpressionsOneLineDetector.ISSUE,
+        SKMIfNestDetector.ISSUE,
+        SKMMethod5Parameters.ISSUE,
+        SKMIfExpression.ISSUE,
+        SKMLogFormat.ISSUE
     )
 
     override val api = CURRENT_API

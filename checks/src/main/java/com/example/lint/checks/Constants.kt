@@ -31,6 +31,11 @@ class Constants {
         const val METHOD_PARAMETER_ID = "MethodParameterID"
         const val METHOD_PARAMETER_BRIEF = "More than 5 input parameters in method"
         const val METHOD_PARAMETER_EXPLANATION = "Method should maximum 5 input parameters"
+
+
+        const val LOG_ID = "LogID"
+        const val LOG_FORMAT = "Log sai format"
+        const val LOG_FORMAT_EXPLANATION = "Sai format ghi log"
     }
 
 }
